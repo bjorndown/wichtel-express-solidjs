@@ -1,0 +1,9 @@
+article {
+  text-align: center;
+}
+
+.person {
+  color: var(--primary-bg-color);
+  font-size: xx-large;
+  font-weight: bold;
+}
