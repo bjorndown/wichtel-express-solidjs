@@ -1,40 +1,29 @@
 import { For } from "solid-js"
-import { SecretSanta } from "~/lib/store"
+import { useSantaStore } from "~/lib/store"
 
-type Props = {
-  santas: SecretSanta[]
-}
-
-export const SecretLinks = (props: Props) => {
+export const SecretLinks = () => {
+  const { santas } = useSantaStore()
   return (
     <>
       <p>
         Versenden Sie nun die persönlichen Links per e-Mail, SMS, WhatsApp,
-        Signal etc:
+        Signal etc.
       </p>
-      <For each={props.santas}>
-        {(person, i) => (
-          <div class="row">
-            <span class="name">{person.name}</span>
-
-            <button
-              class="action"
-              onClick={() =>
-                navigator.clipboard.writeText(person.url as string)
-              }
-            >
-              Link kopieren
-            </button>
-          </div>
+      <For each={santas}>
+        {person => (
+          <button
+            class="full-width"
+            onClick={() => navigator.clipboard.writeText(person.url as string)}
+          >
+            Link f&uuml;r {person.name} kopieren
+          </button>
         )}
       </For>
       <button
         class="full-width"
         onClick={() =>
           navigator.clipboard.writeText(
-            props.santas
-              .map(person => `${person.name}: ${person.url}`)
-              .join("\n"),
+            santas.map(person => `${person.name}: ${person.url}`).join("\n"),
           )
         }
       >

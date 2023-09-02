@@ -2,6 +2,7 @@ import { For } from "solid-js"
 import { ALLOWED_CHARS, ALLOWED_CHARS_FOR_UI } from "~/lib/obfuscate"
 import { useSantaStore } from "~/lib/store"
 import styles from "./Form.module.css"
+import classNames from "classnames"
 
 export const Form = () => {
   const {
@@ -16,37 +17,38 @@ export const Form = () => {
 
   return (
     <form onSubmit={() => drawLots()}>
-      <p>Erfassen Sie alle Teilnehmer:</p>
+      <p>Erfassen Sie alle Personen</p>
       <For each={santas}>
         {(person, i) => (
           <div class="row">
-            <label class="visually-hidden" for={`input-person-${i()}`}>
-              Name Person {i() + 1}
+            <label class="" for={`input-person-${i()}`}>
+              Person {i() + 1}
             </label>
             <input
               id={`input-person-${i()}`}
               onChange={event => updateName(i, event.target.value)}
-              onInvalid={() => markInvalid(i)}
-              title={`Name der Person. Erlaubte Zeichen: ${ALLOWED_CHARS_FOR_UI}`}
-              placeholder={`Name Person ${i() + 1}`}
+              onInvalid={e => {
+                console.dir(e)
+                markInvalid(i)
+              }}
+              // title={`Name der Person. Erlaubte Zeichen: ${ALLOWED_CHARS_FOR_UI}`}
               type="text"
-              size={16}
               value={person.name}
               minLength={3}
               pattern={ALLOWED_CHARS.source}
               aria-label={`Name Person ${i() + 1}`}
             />
-            <button
-              type="button"
-              class={styles.deleteButton}
-              onClick={() => deleteSanta(i)}
-            >
-              Löschen
+            <button type="button" onClick={() => deleteSanta(i)}>
+              L&ouml;schen
             </button>
           </div>
         )}
       </For>
-      <button type="button" class="full-width" onClick={addSanta}>
+      <button
+        type="button"
+        class={classNames("full-width", styles.addButton)}
+        onClick={addSanta}
+      >
         Person hinzufügen
       </button>
 

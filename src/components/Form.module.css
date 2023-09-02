@@ -1,4 +1,3 @@
-.deleteButton {
-    margin-left: 0.5rem;
+.addButton {
+  margin-top: var(--s1);
 }
-

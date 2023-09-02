@@ -10,12 +10,14 @@ const Layout = () => {
             Wichtel<span class={styles.flipped}>🚄</span>
           </A>
         </h1>
-        <A title="Anleitung & Page" href="/impressum">
-          ?
-        </A>
         <span class={styles.claim}>Auslosen ohne Anmeldung</span>
       </header>
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
+      <footer>
+        <A href="https://github.com/bjorndown/wichtel-express">Quellcode</A>
+      </footer>
     </div>
   )
 }

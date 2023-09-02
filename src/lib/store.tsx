@@ -1,5 +1,5 @@
 import { Accessor, createContext, useContext } from "solid-js"
-import { createStore, SetStoreFunction } from "solid-js/store"
+import { createStore } from "solid-js/store"
 import { obfuscate } from "./obfuscate"
 import { draw } from "~/lib/draw"
 
@@ -57,6 +57,9 @@ const createSantaStore = () => {
     },
     markInvalid(i: Accessor<number>): void {
       setSantas(i(), "invalid", true)
+    },
+    lotsNotDrawnYet() {
+      return santas.some(p => !!p.presentee)
     },
   }
 }

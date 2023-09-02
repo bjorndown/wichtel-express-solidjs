@@ -5,9 +5,7 @@ const Impressum = () => {
         <h2>Wie funktioniert es?</h2>
         <ol>
           <li>Sie erfassen alle Personen, die teilnehmen.</li>
-          <li>
-            Wichtel.express lost die Wichtel aus.
-          </li>
+          <li>Wichtel.express lost die Wichtel aus.</li>
           <li>
             Das Result der Auslosung ist ein Link pro teilnehmender Person, der
             per e-Mail oder Messenger-App verschickt werden muss.

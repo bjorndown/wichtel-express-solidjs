@@ -2,15 +2,17 @@ import { Show } from "solid-js"
 import { SecretLinks } from "~/components/SecretLinks"
 import { Form } from "~/components/Form"
 import { useSantaStore } from "~/lib/store"
+import classNames from "classnames"
+import style from "./index.module.css"
 
 const Page = () => {
-  const { santas, reset } = useSantaStore()
+  const { lotsNotDrawnYet, reset } = useSantaStore()
 
   return (
-    <Show when={santas.some(p => !!p.presentee)} fallback={<Form />}>
-      <SecretLinks santas={santas} />
-      <button class="full-width" onClick={reset}>
-        Zurücksetzen
+    <Show when={lotsNotDrawnYet()} fallback={<Form />}>
+      <SecretLinks />
+      <button class={classNames("full-width", style.redraw)} onClick={reset}>
+        Erneut auslosen
       </button>
     </Show>
   )
