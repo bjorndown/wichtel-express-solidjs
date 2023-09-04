@@ -13,8 +13,11 @@ import {
 } from "solid-start"
 import "./root.css"
 import { SantaProvider } from "~/lib/store"
+import { initSentry } from "~/lib/sentry"
 
 export default function Root() {
+  initSentry()
+
   return (
     <Html lang="en">
       <Head>
