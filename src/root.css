@@ -8,6 +8,7 @@
   --button-font-color: white;
   --disabled-color: #e0e0e0;
   --ratio: 1.5;
+  --s-6: calc(var(--s-5) / var(--ratio));
   --s-5: calc(var(--s-4) / var(--ratio));
   --s-4: calc(var(--s-3) / var(--ratio));
   --s-3: calc(var(--s-2) / var(--ratio));
@@ -19,10 +20,13 @@
   --s3: calc(var(--s2) * var(--ratio));
   --s4: calc(var(--s3) * var(--ratio));
   --s5: calc(var(--s4) * var(--ratio));
+  --s6: calc(var(--s5) * var(--ratio));
 
   --small-gap: var(--s-2);
   --medium-gap: var(--s-1);
   --big-gap: var(--s0);
+
+  --border-radius: var(--s-3);
 }
 
 header,
@@ -63,7 +67,10 @@ body {
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
-  padding: 0 var(--s-3);
+  padding: 0 var(--big-gap);
+  margin: 0 auto;
+  max-width: 600px;
+  height: calc(100vh - 2 * var(--big-gap));
 }
 
 input,
@@ -82,7 +89,7 @@ button,
 input[type="submit"] {
   background-color: var(--secondary-bg-color);
   color: var(--button-font-color);
-  border-radius: var(--s-3);
+  border-radius: var(--border-radius);
 }
 
 button.primary,
@@ -97,10 +104,6 @@ input[type="submit"].primary {
 button:disabled,
 input[type="submit"]:disabled {
   background-color: var(--disabled-color);
-}
-
-input:invalid {
-  background: #d07575;
 }
 
 .full-width {
@@ -132,10 +135,9 @@ a {
 
 @media (max-width: 570px) {
   .row {
-    margin-top: calc(3 * var(--big-gap));
-    justify-content: normal;
-
+    margin-top: var(--big-gap);
     gap: var(--medium-gap);
+    justify-content: normal;
   }
 }
 

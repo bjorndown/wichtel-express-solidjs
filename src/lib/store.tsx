@@ -1,31 +1,79 @@
-import { Accessor, createContext, useContext } from "solid-js"
+import { Accessor, createContext, JSXElement, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
-import { obfuscate } from "./obfuscate"
 import { draw } from "~/lib/draw"
+import { containsBlockedChars } from "~/lib/obfuscate"
 
 const SantaContext = createContext<ReturnType<typeof createSantaStore>>()
 
-export type SecretSanta = {
-  name: string
-  presentee?: string
-  url?: string
-  invalid?: boolean
+export type SecretSanta =
+  | UntouchedSanta
+  | InvalidSanta
+  | ValidSanta
+  | DrawnSanta
+  | SantaWithUrl
+
+export type UntouchedSanta = {
+  state: "untouched"
+  name: ""
 }
+
+export type InvalidSanta = {
+  state: "invalid"
+  name: string
+  validationMessage: string
+}
+
+export type ValidSanta = {
+  state: "valid"
+  name: string
+}
+
+export type DrawnSanta = {
+  state: "drawn"
+  name: string
+  presentee: string
+}
+
+export type SantaWithUrl = {
+  state: "withUrl"
+  name: string
+  presentee: string
+  url: string
+}
+
+type SantaStates = SecretSanta["state"]
 
 export const useSantaStore = () => useContext(SantaContext)!
 
-const generateLink = (santa: SecretSanta): string => {
-  const url = new URL("reveal", location.href)
-  url.searchParams.append("s", santa.name)
-  url.searchParams.append("p", obfuscate(santa.presentee) as string)
-  return url.toString()
+const getNextState = (
+  santa: SecretSanta,
+  newName: string,
+): ValidSanta | InvalidSanta => {
+  if ((newName ?? "")?.length < 3) {
+    return {
+      state: "invalid",
+      name: santa.name,
+      validationMessage: "Der Name muss mindestens drei Zeichen lang sein",
+    }
+  }
+
+  if (containsBlockedChars(newName)) {
+    return {
+      state: "invalid",
+      name: santa.name,
+      validationMessage:
+        "Der Name kann keine Sonderzeichen oder Emojis enthalten.",
+    }
+  }
+
+  return { state: "valid", name: newName }
 }
 
 const createSantaStore = () => {
   const [santas, setSantas] = createStore<SecretSanta[]>([
-    { name: "" },
-    { name: "" },
-    { name: "" },
+    { name: "", state: "untouched" },
+    { name: "", state: "untouched" },
+    { name: "", state: "untouched" },
   ])
 
   return {
@@ -34,37 +82,42 @@ const createSantaStore = () => {
       setSantas(santas => santas.filter((_, l) => l !== i()))
     },
     addSanta(): void {
-      setSantas(_ => [...santas, { name: "" }])
+      setSantas(_ => [...santas, { state: "untouched", name: "" }])
     },
     reset(): void {
-      setSantas(santas => santas.map(p => ({ name: p.name })))
+      setSantas(santas =>
+        santas.map(santa => ({ state: "valid", name: santa.name })),
+      )
     },
-    updateName(i: Accessor<number>, name: string): void {
-      setSantas(i(), "name", name)
+    updateName(i: Accessor<number>, newName: string): void {
+      setSantas(i(), santa => getNextState(santa, newName))
     },
     drawLots(): void {
-      draw(santas, setSantas)
-      setSantas(santas =>
-        santas.map(santa => ({ ...santa, url: generateLink(santa) })),
-      )
+      setSantas(santas => draw(santas, location.href))
     },
     isReadyToDrawLots(): boolean {
       return (
-        santas.every(person => (person.name?.length ?? 0) > 0) &&
-        santas.length === new Set(santas.map(p => p.name)).size &&
+        santas.every(santa => santa.state === "valid") &&
+        santas.length === new Set(santas.map(santa => santa.name)).size &&
         santas.length > 2
       )
     },
-    markInvalid(i: Accessor<number>): void {
-      setSantas(i(), "invalid", true)
+    lotsDrawn() {
+      return santas.every(santa => santa.state === "withUrl")
     },
-    lotsNotDrawnYet() {
-      return santas.some(p => !!p.presentee)
+    getSantasWithUrl(): SantaWithUrl[] {
+      const finalSantas = santas.filter<SantaWithUrl>(
+        (santa): santa is SantaWithUrl => santa.state === "withUrl",
+      )
+      if (finalSantas.length !== santas.length) {
+        throw new Error("Invalid state: Not all santas have been drawn")
+      }
+      return finalSantas
     },
   }
 }
 
-export const SantaProvider = (props: { children: any }) => {
+export const SantaProvider = (props: { children: JSXElement }) => {
   return (
     <SantaContext.Provider value={createSantaStore()}>
       {props.children}

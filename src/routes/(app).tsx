@@ -3,7 +3,7 @@ import styles from "./(app).module.css"
 
 const Layout = () => {
   return (
-    <div class={styles.container}>
+    <>
       <header>
         <h1>
           <A href="/">
@@ -16,9 +16,9 @@ const Layout = () => {
         <Outlet />
       </main>
       <footer>
-        <A href="https://github.com/bjorndown/wichtel-express">Quellcode</A>
+        {/*<A href="https://github.com/bjorndown/wichtel-express">Quellcode</A>*/}
       </footer>
-    </div>
+    </>
   )
 }
 

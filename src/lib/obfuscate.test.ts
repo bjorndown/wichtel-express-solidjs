@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
 import { random } from "lodash"
-import { deObfuscate, obfuscate, PAD_TO_LENGTH, padWith } from "./obfuscate"
+import {
+  containsBlockedChars,
+  deObfuscate,
+  obfuscate,
+  PAD_TO_LENGTH,
+  padWith,
+} from "./obfuscate"
 
 describe("obfuscate", () => {
   it("must pad to given length", () => {
@@ -45,4 +51,15 @@ describe.each([
   "reallyaverylongnameunbelievable",
 ])('obfuscate/deobfuscate e2e with "%s"', name => {
   expect(deObfuscate(obfuscate(name))).toBe(name)
+})
+
+describe("containsBlockedChars", () => {
+  it("must return true for non ", () => {
+    expect(containsBlockedChars("asd;d")).toBe(true)
+    expect(containsBlockedChars("[]")).toBe(true)
+    expect(containsBlockedChars(";asd")).toBe(true)
+    expect(containsBlockedChars("asd:")).toBe(true)
+    expect(containsBlockedChars("asd-test")).toBe(false)
+    expect(containsBlockedChars("asd test")).toBe(false)
+  })
 })

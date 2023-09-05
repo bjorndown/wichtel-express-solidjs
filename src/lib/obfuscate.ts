@@ -3,11 +3,8 @@ import _range from "lodash/range"
 
 const RANDOM_PREFIX_LENGTH = 4 // two two-digit hex numbers
 export const PAD_TO_LENGTH = 40
-export const ALLOWED_CHARS =
-  /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZäöüéèàçêâëãøôÄÖÜ\- ]+/
-export const ALLOWED_CHARS_FOR_UI = ALLOWED_CHARS.toString()
-  .slice(2, ALLOWED_CHARS.toString().length - 4)
-  .replace("\\", "")
+export const containsBlockedChars = (str: string) =>
+  !/^[\p{Alpha}\- ]+$/u.test(str)
 
 export const stringToHex = (str: string | undefined | null): string | null => {
   if (!str) {
@@ -22,11 +19,11 @@ const randomHex = () => toHex(_random(0, 255))
 
 const toHex = (number: Number) => number.toString(16).padStart(2, "0")
 
-export const obfuscate = (str: string | undefined | null): string | null => {
+export const obfuscate = (str: string | null | undefined): string | null => {
   if (!str) {
     return null
   }
-  if (!ALLOWED_CHARS.test(str)) {
+  if (containsBlockedChars(str)) {
     return null
   }
 
@@ -79,7 +76,7 @@ export const deObfuscate = (str: string | undefined | null): string | null => {
   const plainText = hexToString(
     stringWithoutPrefix.slice(2, 2 + obfuscatedTextLength * 2),
   )
-  if (!ALLOWED_CHARS.test(plainText ?? "")) {
+  if (containsBlockedChars(plainText ?? "")) {
     return null
   }
 

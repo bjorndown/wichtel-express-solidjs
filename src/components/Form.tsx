@@ -1,9 +1,46 @@
-import { For } from "solid-js"
-import { ALLOWED_CHARS, ALLOWED_CHARS_FOR_UI } from "~/lib/obfuscate"
-import { useSantaStore } from "~/lib/store"
+import { Accessor, For, JSX } from "solid-js"
+import { SecretSanta, useSantaStore } from "~/lib/store"
 import styles from "./Form.module.css"
 import classNames from "classnames"
 
+type InputProps = {
+  index: Accessor<number>
+  santa: SecretSanta
+  delete: () => void
+  update: (name: string) => void
+}
+
+const Input = (props: InputProps) => {
+  const updateAndValidate: JSX.InputEventHandler<
+    HTMLInputElement,
+    InputEvent
+  > = event => {
+    props.update(event.target.value)
+    const customValidity =
+      props.santa.state === "invalid" ? props.santa.validationMessage : ""
+    event.currentTarget.setCustomValidity(customValidity)
+    event.currentTarget.reportValidity()
+  }
+
+  return (
+    <>
+      <label class="" for={`input-person-${props.index()}`}>
+        Person {props.index() + 1}
+      </label>
+      <input
+        id={`input-person-${props.index()}`}
+        onInput={updateAndValidate}
+        title={`Name der Person. Der Name muss mindestens drei Zeichen lang sein. Die meisten Sonderzeichen und Emojis werden nicht unterstützt.`}
+        type="text"
+        value={props.santa.name}
+        aria-label={`Name Person ${props.index() + 1}`}
+      />
+      <button type="button" onClick={props.delete}>
+        L&ouml;schen
+      </button>
+    </>
+  )
+}
 export const Form = () => {
   const {
     santas,
@@ -12,35 +49,20 @@ export const Form = () => {
     drawLots,
     updateName,
     isReadyToDrawLots,
-    markInvalid,
   } = useSantaStore()
 
   return (
     <form onSubmit={() => drawLots()}>
       <p>Erfassen Sie alle Personen</p>
       <For each={santas}>
-        {(person, i) => (
+        {(santa, i) => (
           <div class="row">
-            <label class="" for={`input-person-${i()}`}>
-              Person {i() + 1}
-            </label>
-            <input
-              id={`input-person-${i()}`}
-              onChange={event => updateName(i, event.target.value)}
-              onInvalid={e => {
-                console.dir(e)
-                markInvalid(i)
-              }}
-              // title={`Name der Person. Erlaubte Zeichen: ${ALLOWED_CHARS_FOR_UI}`}
-              type="text"
-              value={person.name}
-              minLength={3}
-              pattern={ALLOWED_CHARS.source}
-              aria-label={`Name Person ${i() + 1}`}
+            <Input
+              index={i}
+              santa={santa}
+              update={name => updateName(i, name)}
+              delete={() => deleteSanta(i)}
             />
-            <button type="button" onClick={() => deleteSanta(i)}>
-              L&ouml;schen
-            </button>
           </div>
         )}
       </For>
