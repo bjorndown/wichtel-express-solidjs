@@ -13,10 +13,21 @@ import {
 } from "solid-start"
 import "./root.css"
 import { SantaProvider } from "~/lib/store"
-import { initSentry } from "~/lib/sentry"
+import { captureException, initSentry } from "~/lib/sentry"
+
 
 export default function Root() {
   initSentry()
+
+  const errorComponent = (e: Error) => {
+    captureException(e)
+    return (
+      <>
+        <h1>Unerwarteter Fehler</h1>
+        <p>{e.name}: {e.message}</p>
+      </>
+    )
+  }
 
   return (
     <Html lang="en">
@@ -38,7 +49,9 @@ export default function Root() {
       </Head>
       <Body>
         <Suspense>
-          <ErrorBoundary>
+          <ErrorBoundary
+            fallback={errorComponent}
+          >
             <SantaProvider>
               <Routes>
                 <FileRoutes />
