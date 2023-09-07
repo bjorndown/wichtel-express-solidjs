@@ -7,6 +7,7 @@
   --secondary-bg-color: #0277bd;
   --button-font-color: white;
   --disabled-color: #e0e0e0;
+  --error-color: #ffa300;
   --ratio: 1.5;
   --s-6: calc(var(--s-5) / var(--ratio));
   --s-5: calc(var(--s-4) / var(--ratio));
@@ -70,7 +71,6 @@ body {
   padding: 0 var(--big-gap);
   margin: 0 auto;
   max-width: 600px;
-  height: calc(100vh - 2 * var(--big-gap));
 }
 
 input,
@@ -82,7 +82,8 @@ button {
 }
 
 input[type="text"] {
-  border: 1px solid black;
+  border: var(--s-5) solid var(--primary-bg-color);
+  border-radius: var(--border-radius);
 }
 
 button,

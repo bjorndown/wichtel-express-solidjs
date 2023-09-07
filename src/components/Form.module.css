@@ -1,3 +1,7 @@
 .addButton {
   margin-top: var(--s1);
 }
+
+input:invalid {
+  outline: var(--s-5) solid var(--error-color);
+}

@@ -30,6 +30,7 @@ const Input = (props: InputProps) => {
       <input
         id={`input-person-${props.index()}`}
         onInput={updateAndValidate}
+        onFocusIn={event => event.currentTarget.reportValidity()}
         title={`Name der Person. Der Name muss mindestens drei Zeichen lang sein. Die meisten Sonderzeichen und Emojis werden nicht unterstützt.`}
         type="text"
         value={props.santa.name}
