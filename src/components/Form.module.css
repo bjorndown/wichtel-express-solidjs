@@ -3,5 +3,12 @@
 }
 
 input:invalid {
-  outline: var(--s-5) solid var(--error-color);
+  outline: var(--s-4) solid var(--error-color);
+}
+
+.validationMessage {
+  padding: var(--small-gap) var(--medium-gap);
+  background-color: var(--error-color);
+  border-radius: var(--border-radius);
+  color: var(--button-font-color);
 }

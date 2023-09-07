@@ -1,4 +1,10 @@
-import { Accessor, createContext, JSXElement, useContext } from "solid-js"
+import {
+  Accessor,
+  createContext,
+  createSignal,
+  JSXElement,
+  useContext,
+} from "solid-js"
 import { createStore } from "solid-js/store"
 import { draw } from "~/lib/draw"
 import { containsBlockedChars } from "~/lib/obfuscate"
@@ -75,9 +81,11 @@ const createSantaStore = () => {
     { name: "", state: "untouched" },
     { name: "", state: "untouched" },
   ])
+  const [validationMessage, setValidationMessage] = createSignal("")
 
   return {
     santas,
+    validationMessage,
     deleteSanta(i: Accessor<number>) {
       setSantas(santas => santas.filter((_, l) => l !== i()))
     },
@@ -96,11 +104,29 @@ const createSantaStore = () => {
       setSantas(santas => draw(santas, location.href))
     },
     isReadyToDrawLots(): boolean {
-      return (
-        santas.every(santa => santa.state === "valid") &&
-        santas.length === new Set(santas.map(santa => santa.name)).size &&
-        santas.length > 2
-      )
+      const santasValid = santas.every(santa => santa.state === "valid")
+      const santasUnique =
+        santas.length === new Set(santas.map(santa => santa.name)).size
+      const enoughSantas = santas.length > 2
+      const ready = santasValid && santasUnique && enoughSantas
+
+      if (!santasUnique) {
+        setValidationMessage(
+          "Namen der Teilnehmer:innen müssen eindeutig sein.",
+        )
+      }
+
+      if (!enoughSantas) {
+        setValidationMessage(
+          "Es müssen mindestens zwei Teilnehmer:innen eingegeben werden.",
+        )
+      }
+
+      if (ready) {
+        setValidationMessage("")
+      }
+
+      return ready
     },
     lotsDrawn() {
       return santas.every(santa => santa.state === "withUrl")

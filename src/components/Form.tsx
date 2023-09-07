@@ -1,4 +1,4 @@
-import { Accessor, For, JSX } from "solid-js"
+import { Accessor, For, JSX, Show } from "solid-js"
 import { SecretSanta, useSantaStore } from "~/lib/store"
 import styles from "./Form.module.css"
 import classNames from "classnames"
@@ -50,6 +50,7 @@ export const Form = () => {
     drawLots,
     updateName,
     isReadyToDrawLots,
+    validationMessage,
   } = useSantaStore()
 
   return (
@@ -74,7 +75,15 @@ export const Form = () => {
       >
         Person hinzufügen
       </button>
-
+      <Show
+        when={
+          !isReadyToDrawLots() && santas.every(santa => santa.state === "valid")
+        }
+      >
+        <p class={classNames(styles.validationMessage, "full-width")}>
+          {validationMessage()}
+        </p>
+      </Show>
       <input
         type="submit"
         class="full-width primary"
