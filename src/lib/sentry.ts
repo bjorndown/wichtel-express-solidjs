@@ -5,7 +5,9 @@ const getEnvironment = () => {
   if (isServer) {
     return process.env.VERCEL ? "production" : "local"
   }
-  return window.location.host.startsWith("http://localhost") ? "local" : "production"
+  return window.location.host.startsWith("http://localhost")
+    ? "local"
+    : "production"
 }
 
 export const initSentry = () => {
@@ -20,7 +22,7 @@ export const initSentry = () => {
     replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
     environment,
     beforeSend: (
-      event: Sentry.Event
+      event: Sentry.Event,
     ): Sentry.Event | PromiseLike<Sentry.Event | null> | null => {
       if (environment === "local") {
         console.log(event)
@@ -28,8 +30,8 @@ export const initSentry = () => {
       } else {
         return event
       }
-    }
+    },
   })
 }
 
-  export const captureException = Sentry.captureException
+export const captureException = Sentry.captureException
