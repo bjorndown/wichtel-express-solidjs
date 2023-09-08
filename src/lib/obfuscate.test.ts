@@ -44,13 +44,15 @@ describe("padWith", () => {
   })
 })
 
-describe.each([
-  "Bjørn",
-  "Jacquéline",
-  "Jacques-Jérôme Pâtios",
-  "reallyaverylongnameunbelievable",
-])('obfuscate/deobfuscate e2e with "%s"', name => {
-  expect(deObfuscate(obfuscate(name))).toBe(name)
+describe("obfuscate/deobfuscate e2e", () => {
+  it.each([
+    "Bjørn",
+    "Jacquéline",
+    "Jacques-Jérôme Pâtios",
+    "reallyaverylongnameunbelievable",
+  ])('obfuscate/deobfuscate e2e with "%s"', name => {
+    expect(deObfuscate(obfuscate(name))).toBe(name)
+  })
 })
 
 describe("containsBlockedChars", () => {

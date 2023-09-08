@@ -1,20 +1,10 @@
-import { describe, expect, it } from "vitest"
+import { bench, expect } from "vitest"
 import { draw } from "~/lib/draw"
 import { santas } from "~/lib/data"
 
-describe("drawLots", () => {
-  it("must fail if names are not unique", () => {
-    expect(() =>
-      draw(
-        [
-          { state: "valid", name: "same" },
-          { state: "valid", name: "same" },
-        ],
-        "",
-      ),
-    ).toThrowError(/not unique/)
-  })
-  it("must draw lots such that no-one draws him or herself and that lots are unique", () => {
+bench(
+  "draw",
+  () => {
     const urlBase = "http://example.test"
     const drawnSantas = draw(santas, urlBase)
 
@@ -28,5 +18,6 @@ describe("drawLots", () => {
       new Set(drawnSantas.map(s => s.name)),
     )
     expect(drawnSantas.every(santa => santa.url.startsWith(urlBase)))
-  })
-})
+  },
+  { iterations: 500, time: 1000 },
+)

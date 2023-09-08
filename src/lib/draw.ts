@@ -1,8 +1,10 @@
-import _sample from "lodash/sample"
+import _shuffle from "lodash/shuffle"
 import { DrawnSanta, SantaWithUrl, SecretSanta } from "~/lib/store"
 import { obfuscate } from "~/lib/obfuscate"
 
-const assertNamesAreUnique = (santas: SecretSanta[]) => {
+const SHUFFLE_LIMIT = 50
+
+const assertNamesAreUnique = (santas: readonly SecretSanta[]) => {
   if (new Set(santas.map(santa => santa.name)).size !== santas.length) {
     throw new Error("Names are not unique")
   }
@@ -16,33 +18,29 @@ const addUrl = (santa: DrawnSanta, urlBase: string): SantaWithUrl => {
 }
 
 export const draw = (
-  santas: SecretSanta[],
+  santas: readonly SecretSanta[],
   urlBase: string,
 ): SantaWithUrl[] => {
   assertNamesAreUnique(santas)
 
-  const drawnSantas: DrawnSanta[] = []
+  let presenteePool = _shuffle(santas)
+  let shuffles = 0
 
-  while (drawnSantas.length !== santas.length) {
-    for (const santa of santas) {
-      const otherSantas = santas.filter(
-        otherSanta => otherSanta.name !== santa!.name,
-      )
-      const presentee = _sample(otherSantas) as SecretSanta // it will not be nullish
-      const notAlreadyPresentee = drawnSantas.every(
-        santa => santa.presentee !== presentee.name,
-      )
-      const notAlreadyDrawn = !drawnSantas.find(s => s.name === santa.name)
-
-      if (notAlreadyPresentee && notAlreadyDrawn) {
-        drawnSantas.push({
-          state: "drawn",
-          name: santa.name,
-          presentee: presentee.name,
-        })
-      }
+  while (santas.some((santa, i) => santa.name === presenteePool[i].name)) {
+    if (shuffles > SHUFFLE_LIMIT) {
+      throw new Error(`stopped shuffling after ${SHUFFLE_LIMIT} iterations`)
     }
+    presenteePool = _shuffle(presenteePool)
+    shuffles++
   }
 
-  return drawnSantas.map(santa => addUrl(santa, urlBase))
+  return santas
+    .map(
+      (santa, i): DrawnSanta => ({
+        state: "drawn",
+        name: santa.name,
+        presentee: presenteePool[i].name,
+      }),
+    )
+    .map(santa => addUrl(santa, urlBase))
 }
