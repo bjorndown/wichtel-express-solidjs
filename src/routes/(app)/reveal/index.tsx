@@ -11,7 +11,7 @@ const Reveal = () => {
   const presentee = deObfuscate(firstQueryParameter(query["p"]))
   const invalid = !santa || !presentee
   const fallback = (
-    <button class="primary" onClick={() => setRevealed(true)}>
+    <button class="primary plausible-event-name=revealName" onClick={() => setRevealed(true)}>
       Enthülle den Namen
     </button>
   )

@@ -46,7 +46,7 @@ export default function Root() {
           content="wichtel, wichteln, secret santa, auslosen, zuweisen, express, schnell, einfach, unkompliziert, ohne anmeldung"
         />
         <link rel="icon" href="/favicon.png" type="image/png" />
-        <script defer data-domain="wichtel.express" src="https://plausible.io/js/script.js"></script>
+        <script defer data-domain="wichtel.express" src="https://plausible.io/js/script.tagged-events.js"></script>
       </Head>
       <Body>
         <Suspense>

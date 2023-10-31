@@ -15,7 +15,7 @@ export const SecretLinks = () => {
         {santa => {
           return (
             <button
-              class="full-width"
+              class="full-width plausible-event-name=copySingleLink"
               onClick={() => navigator.clipboard.writeText(santa.url)}
             >
               Link f&uuml;r {santa.name} kopieren
@@ -24,7 +24,7 @@ export const SecretLinks = () => {
         }}
       </For>
       <button
-        class="full-width"
+        class="full-width plausible-event-name=copyAllLinks"
         onClick={() =>
           navigator.clipboard.writeText(
             getSantasWithUrl()

@@ -86,7 +86,7 @@ export const Form = () => {
       </Show>
       <input
         type="submit"
-        class="full-width primary"
+        class="full-width primary plausible-event-name=drawLots"
         disabled={!isReadyToDrawLots()}
         value="Wichtel auslosen"
       />
