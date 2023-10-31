@@ -5,7 +5,7 @@ const getEnvironment = () => {
   if (isServer) {
     return process.env.VERCEL ? "production" : "local"
   }
-  return window.location.host.startsWith("http://localhost")
+  return window.location.host.includes("localhost")
     ? "local"
     : "production"
 }
