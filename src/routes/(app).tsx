@@ -16,7 +16,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <footer>
-        {/*<A href="https://github.com/bjorndown/wichtel-express">Quellcode</A>*/}
+        <A href="/impressum">Impressum</A>
       </footer>
     </>
   )

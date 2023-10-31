@@ -34,6 +34,13 @@ header,
 main,
 footer {
   margin: var(--s1) 0;
+  line-height: 1.5;
+}
+
+footer {
+  margin-top: calc(2 * var(--big-gap));
+  font-size: var(--s0);
+  text-align: right;
 }
 
 h1,
