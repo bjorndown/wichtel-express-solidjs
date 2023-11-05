@@ -56,6 +56,7 @@ export const Form = () => {
   return (
     <form onSubmit={() => drawLots()}>
       <p>Erfassen Sie alle Personen</p>
+    <form class="plausible-event-name=drawNames" onSubmit={() => drawLots()}>
       <For each={santas}>
         {(santa, i) => (
           <div class="row">
@@ -86,7 +87,7 @@ export const Form = () => {
       </Show>
       <input
         type="submit"
-        class="full-width primary plausible-event-name=drawLots"
+        class="full-width primary"
         disabled={!isReadyToDrawLots()}
         value="Wichtel auslosen"
       />
