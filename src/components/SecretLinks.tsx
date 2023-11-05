@@ -35,7 +35,14 @@ export const SecretLinks = () => {
       >
         Alle Namen und Links kopieren
       </button>
-      <button class={classNames("full-width", style.redraw)} onClick={reset}>
+      <button
+        class={classNames(
+          "full-width",
+          style.redraw,
+          "plausible-event-name=redrawNames",
+        )}
+        onClick={reset}
+      >
         Erneut auslosen
       </button>
     </>

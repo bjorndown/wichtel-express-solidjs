@@ -54,7 +54,13 @@ export const Form = () => {
   } = useSantaStore()
 
   return (
-    <form class="plausible-event-name=drawNames" onSubmit={() => drawLots()}>
+    <form
+      class={classNames(
+        "plausible-event-name=drawNames",
+        `plausible-event-groupSize=${santas.length}`,
+      )}
+      onSubmit={() => drawLots()}
+    >
       <p>Erfassen Sie alle Personen</p>
       <For each={santas}>
         {(santa, i) => (
