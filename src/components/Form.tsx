@@ -54,9 +54,8 @@ export const Form = () => {
   } = useSantaStore()
 
   return (
-    <form onSubmit={() => drawLots()}>
-      <p>Erfassen Sie alle Personen</p>
     <form class="plausible-event-name=drawNames" onSubmit={() => drawLots()}>
+      <p>Erfassen Sie alle Personen</p>
       <For each={santas}>
         {(santa, i) => (
           <div class="row">
