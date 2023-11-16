@@ -6,7 +6,7 @@ bench(
   "draw",
   () => {
     const urlBase = "http://example.test"
-    const drawnSantas = draw(santas, urlBase)
+    const drawnSantas = draw(santas, urlBase, "de")
 
     expect(drawnSantas.every(s => s.state === "withUrl")).toBe(true)
     expect(drawnSantas.every(s => !!s.presentee)).toBe(true)

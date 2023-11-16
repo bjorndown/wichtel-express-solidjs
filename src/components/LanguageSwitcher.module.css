@@ -1,0 +1,23 @@
+.language {
+  background: none;
+  font-size: var(--s0);
+  color: black;
+  margin: 0;
+}
+
+.activeLanguage {
+  font-weight: bold;
+}
+
+ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-content: end;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}

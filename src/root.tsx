@@ -11,20 +11,26 @@ import {
   Scripts,
   Title,
 } from "solid-start"
+import { Trans, TransProvider } from "@mbarzda/solid-i18next"
 import "./root.css"
 import { SantaProvider } from "~/lib/store"
 import { captureException, initSentry } from "~/lib/sentry"
-
+import { configureI18next, translations } from "~/lib/i18n"
 
 export default function Root() {
   initSentry()
+  configureI18next().catch(captureException)
 
   const errorComponent = (e: Error) => {
     captureException(e)
     return (
       <>
-        <h1>Unerwarteter Fehler</h1>
-        <p>{e.name}: {e.message}</p>
+        <h1>
+          <Trans key="errorHeadline" />
+        </h1>
+        <p>
+          {e.name}: {e.message}
+        </p>
       </>
     )
   }
@@ -43,21 +49,30 @@ export default function Root() {
         />
         <meta
           name="keywords"
-          content="wichtel, wichteln, secret santa, auslosen, zuweisen, express, schnell, einfach, unkompliziert, ohne anmeldung"
+          content="wichtel, wichteln, secret santa, père noël secret, auslosen, draw names, tirer au sort, zuweisen, express, schnell, einfach, unkompliziert, ohne anmeldung, quick, simplement, easy"
         />
         <link rel="icon" href="/favicon.png" type="image/png" />
-        <script defer data-domain="wichtel.express" src="https://plausible.io/js/script.tagged-events.js"></script>
+        <script
+          defer
+          data-domain="wichtel.express"
+          src="https://plausible.io/js/script.tagged-events.js"
+        ></script>
       </Head>
       <Body>
         <Suspense>
-          <ErrorBoundary
-            fallback={errorComponent}
-          >
-            <SantaProvider>
-              <Routes>
-                <FileRoutes />
-              </Routes>
-            </SantaProvider>
+          <ErrorBoundary fallback={errorComponent}>
+            <TransProvider
+              options={{
+                interpolation: { prefix: "$$", suffix: "$$" },
+                resources: translations,
+              }}
+            >
+              <SantaProvider>
+                <Routes>
+                  <FileRoutes />
+                </Routes>
+              </SantaProvider>
+            </TransProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

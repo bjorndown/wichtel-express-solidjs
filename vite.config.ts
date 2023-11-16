@@ -5,5 +5,5 @@ import { defineConfig } from "vite";
 const config = process.env.VERCEL ? { adapter: vercel() } : undefined;
 
 export default defineConfig({
-  plugins: [solid(config)],
+  plugins: [solid({ ssr: false, ...config })],
 });

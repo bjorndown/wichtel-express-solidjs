@@ -11,12 +11,13 @@ describe("drawLots", () => {
           { state: "valid", name: "same" },
         ],
         "",
+        "de",
       ),
     ).toThrowError(/not unique/)
   })
   it("must draw lots such that no-one draws him or herself and that lots are unique", () => {
     const urlBase = "http://example.test"
-    const drawnSantas = draw(santas, urlBase)
+    const drawnSantas = draw(santas, urlBase, "de")
 
     expect(drawnSantas.every(s => s.state === "withUrl")).toBe(true)
     expect(drawnSantas.every(s => !!s.presentee)).toBe(true)

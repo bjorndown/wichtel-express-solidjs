@@ -8,8 +8,15 @@ import {
 import { createStore } from "solid-js/store"
 import { draw } from "~/lib/draw"
 import { containsBlockedChars } from "~/lib/obfuscate"
+import { SupportedLanguages } from "~/lib/i18n"
 
 const SantaContext = createContext<ReturnType<typeof createSantaStore>>()
+
+type ValidationErrors =
+  | "NameTooShort"
+  | "NameContainsInvalidChars"
+  | "NotEnoughNames"
+  | "NamesNotUnique"
 
 export type SecretSanta =
   | UntouchedSanta
@@ -26,7 +33,7 @@ export type UntouchedSanta = {
 export type InvalidSanta = {
   state: "invalid"
   name: string
-  validationMessage: string
+  validationError: ValidationErrors
 }
 
 export type ValidSanta = {
@@ -59,7 +66,7 @@ const getNextState = (
     return {
       state: "invalid",
       name: santa.name,
-      validationMessage: "Der Name muss mindestens drei Zeichen lang sein",
+      validationError: "NameTooShort",
     }
   }
 
@@ -67,8 +74,7 @@ const getNextState = (
     return {
       state: "invalid",
       name: santa.name,
-      validationMessage:
-        "Der Name kann keine Sonderzeichen oder Emojis enthalten.",
+      validationError: "NameContainsInvalidChars",
     }
   }
 
@@ -81,11 +87,12 @@ const createSantaStore = () => {
     { name: "", state: "untouched" },
     { name: "", state: "untouched" },
   ])
-  const [validationMessage, setValidationMessage] = createSignal("")
+  const [validationError, setValidationError] =
+    createSignal<ValidationErrors | null>(null)
 
   return {
     santas,
-    validationMessage,
+    validationError,
     deleteSanta(i: Accessor<number>) {
       setSantas(santas => santas.filter((_, l) => l !== i()))
     },
@@ -100,8 +107,8 @@ const createSantaStore = () => {
     updateName(i: Accessor<number>, newName: string): void {
       setSantas(i(), santa => getNextState(santa, newName))
     },
-    drawLots(): void {
-      setSantas(santas => draw(santas, location.href))
+    drawLots(language: SupportedLanguages): void {
+      setSantas(santas => draw(santas, location.href, language))
     },
     isReadyToDrawLots(): boolean {
       const santasValid = santas.every(santa => santa.state === "valid")
@@ -111,19 +118,15 @@ const createSantaStore = () => {
       const ready = santasValid && santasUnique && enoughSantas
 
       if (!santasUnique) {
-        setValidationMessage(
-          "Namen der Teilnehmer:innen müssen eindeutig sein.",
-        )
+        setValidationError("NamesNotUnique")
       }
 
       if (!enoughSantas) {
-        setValidationMessage(
-          "Es müssen mindestens zwei Teilnehmer:innen eingegeben werden.",
-        )
+        setValidationError("NotEnoughNames")
       }
 
       if (ready) {
-        setValidationMessage("")
+        setValidationError(null)
       }
 
       return ready

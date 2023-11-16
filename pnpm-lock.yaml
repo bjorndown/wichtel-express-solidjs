@@ -1,10 +1,13 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@mbarzda/solid-i18next':
+    specifier: 1.2.2
+    version: 1.2.2(html-parse-string@0.0.9)(i18next@23.6.0)(solid-js@1.7.11)
   '@sentry/browser':
     specifier: 7.66.0
     version: 7.66.0
@@ -17,6 +20,15 @@ dependencies:
   classnames:
     specifier: 2.3.2
     version: 2.3.2
+  html-parse-string:
+    specifier: 0.0.9
+    version: 0.0.9
+  i18next:
+    specifier: ^23.6.0
+    version: 23.6.0
+  i18next-browser-languagedetector:
+    specifier: 7.1.0
+    version: 7.1.0
   lodash:
     specifier: 4.17.21
     version: 4.17.21
@@ -1583,6 +1595,21 @@ packages:
       - encoding
       - supports-color
 
+  /@mbarzda/solid-i18next@1.2.2(html-parse-string@0.0.9)(i18next@23.6.0)(solid-js@1.7.11):
+    resolution: {integrity: sha512-qXXFcBKnR8F91yexj1WfYiwCW6Y39mWZt/g79FDbxEvQwxhxdIrGCLLY0+YLNdQVrQ0M6bNJ1v6yOE828mRvUA==}
+    peerDependencies:
+      html-parse-string: <=1.x
+      i18next: '>=22.x'
+      solid-js: '>=1.6.x'
+    peerDependenciesMeta:
+      html-parse-string:
+        optional: true
+    dependencies:
+      html-parse-string: 0.0.9
+      i18next: 23.6.0
+      solid-js: 1.7.11
+    dev: false
+
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -2603,6 +2630,10 @@ packages:
   /html-entities@2.3.3:
     resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
 
+  /html-parse-string@0.0.9:
+    resolution: {integrity: sha512-wyGnsOolHbNrcb8N6bdJF4EHyzd3zVGCb9/mBxeNjAYBDOZqD7YkqLBz7kXtdgHwNnV8lN/BpSDpsI1zm8Sd8g==}
+    dev: false
+
   /https-proxy-agent@5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
@@ -2619,6 +2650,18 @@ packages:
   /human-signals@4.3.1:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
     engines: {node: '>=14.18.0'}
+
+  /i18next-browser-languagedetector@7.1.0:
+    resolution: {integrity: sha512-cr2k7u1XJJ4HTOjM9GyOMtbOA47RtUoWRAtt52z43r3AoMs2StYKyjS3URPhzHaf+mn10hY9dZWamga5WPQjhA==}
+    dependencies:
+      '@babel/runtime': 7.22.11
+    dev: false
+
+  /i18next@23.6.0:
+    resolution: {integrity: sha512-z0Cxr0MGkt+kli306WS4nNNM++9cgt2b2VCMprY92j+AIab/oclgPxdwtTZVLP1zn5t5uo8M6uLsZmYrcjr3HA==}
+    dependencies:
+      '@babel/runtime': 7.22.11
+    dev: false
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}

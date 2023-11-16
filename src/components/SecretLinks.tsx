@@ -2,14 +2,14 @@ import { For } from "solid-js"
 import { useSantaStore } from "~/lib/store"
 import classNames from "classnames"
 import style from "~/routes/(app)/index.module.css"
+import { Trans } from "@mbarzda/solid-i18next"
 
 export const SecretLinks = () => {
   const { getSantasWithUrl, reset } = useSantaStore()
   return (
     <>
       <p>
-        Versenden Sie nun die persönlichen Links per e-Mail, SMS, WhatsApp,
-        Signal etc.
+        <Trans key="secretLinksTopText" />
       </p>
       <For each={getSantasWithUrl()}>
         {santa => {
@@ -18,7 +18,10 @@ export const SecretLinks = () => {
               class="full-width plausible-event-name=copySingleLink"
               onClick={() => navigator.clipboard.writeText(santa.url)}
             >
-              Link f&uuml;r {santa.name} kopieren
+              <Trans
+                key="copySingleLinkButton"
+                options={{ name: santa.name }}
+              />
             </button>
           )
         }}
@@ -33,7 +36,7 @@ export const SecretLinks = () => {
           )
         }
       >
-        Alle Namen und Links kopieren
+        <Trans key="copyAllLinksButton" />
       </button>
       <button
         class={classNames(
@@ -43,7 +46,7 @@ export const SecretLinks = () => {
         )}
         onClick={reset}
       >
-        Erneut auslosen
+        <Trans key="redrawNamesButton" />
       </button>
     </>
   )

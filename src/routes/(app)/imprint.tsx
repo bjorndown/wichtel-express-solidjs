@@ -1,4 +1,4 @@
-const Impressum = () => {
+const Imprint = () => {
   return (
     <article>
       <h2>Kontakt</h2>
@@ -10,8 +10,8 @@ const Impressum = () => {
       <h2>Datenschutz</h2>
       <p>
         Wichtel.express speichert keine der eingegebenen Namen oder persönlichen
-        Links. Die Auslosung findet nur im Browser auf Ihrem Gerät statt, es ist kein entfernter
-        Dienst involviert.
+        Links. Die Auslosung findet nur im Browser auf Ihrem Gerät statt, es ist
+        kein entfernter Dienst involviert.
       </p>
       <p>
         Um zu verstehen, ob und wie diese Applikation verwendet wird, setzt
@@ -49,4 +49,4 @@ const Impressum = () => {
   )
 }
 
-export default Impressum
+export default Imprint

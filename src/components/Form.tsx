@@ -2,6 +2,8 @@ import { Accessor, For, JSX, Show } from "solid-js"
 import { SecretSanta, useSantaStore } from "~/lib/store"
 import styles from "./Form.module.css"
 import classNames from "classnames"
+import { Trans, useTransContext } from "@mbarzda/solid-i18next"
+import { getResolvedLanguage } from "~/lib/i18n"
 
 type InputProps = {
   index: Accessor<number>
@@ -11,13 +13,17 @@ type InputProps = {
 }
 
 const Input = (props: InputProps) => {
+  const [t] = useTransContext()
+
   const updateAndValidate: JSX.InputEventHandler<
     HTMLInputElement,
     InputEvent
   > = event => {
     props.update(event.target.value)
     const customValidity =
-      props.santa.state === "invalid" ? props.santa.validationMessage : ""
+      props.santa.state === "invalid"
+        ? t(`validationError${props.santa.validationError}`)
+        : ""
     event.currentTarget.setCustomValidity(customValidity)
     event.currentTarget.reportValidity()
   }
@@ -25,19 +31,19 @@ const Input = (props: InputProps) => {
   return (
     <>
       <label class="" for={`input-person-${props.index()}`}>
-        Person {props.index() + 1}
+        <Trans key="personInputLabel" options={{ index: props.index() + 1 }} />
       </label>
       <input
         id={`input-person-${props.index()}`}
         onInput={updateAndValidate}
         onFocusIn={event => event.currentTarget.reportValidity()}
-        title={`Name der Person. Der Name muss mindestens drei Zeichen lang sein. Die meisten Sonderzeichen und Emojis werden nicht unterstützt.`}
+        title={t("personInputTitle")}
         type="text"
         value={props.santa.name}
-        aria-label={`Name Person ${props.index() + 1}`}
+        aria-label={t("personInputAriaLabel", { index: props.index() + 1 })}
       />
       <button type="button" onClick={props.delete}>
-        L&ouml;schen
+        <Trans key="deleteButton" />
       </button>
     </>
   )
@@ -50,18 +56,20 @@ export const Form = () => {
     drawLots,
     updateName,
     isReadyToDrawLots,
-    validationMessage,
+    validationError,
   } = useSantaStore()
-
+  const [t, { getI18next }] = useTransContext()
   return (
     <form
       class={classNames(
         "plausible-event-name=drawNames",
         `plausible-event-groupSize=${santas.length}`,
       )}
-      onSubmit={() => drawLots()}
+      onSubmit={() => drawLots(getResolvedLanguage(getI18next()))}
     >
-      <p>Erfassen Sie alle Personen</p>
+      <p>
+        <Trans key="formTopText" />
+      </p>
       <For each={santas}>
         {(santa, i) => (
           <div class="row">
@@ -79,7 +87,7 @@ export const Form = () => {
         class={classNames("full-width", styles.addButton)}
         onClick={addSanta}
       >
-        Person hinzufügen
+        <Trans key="addPersonButton" />
       </button>
       <Show
         when={
@@ -87,14 +95,14 @@ export const Form = () => {
         }
       >
         <p class={classNames(styles.validationMessage, "full-width")}>
-          {validationMessage()}
+          <Trans key={`validationError${validationError()}`} />
         </p>
       </Show>
       <input
         type="submit"
         class="full-width primary"
         disabled={!isReadyToDrawLots()}
-        value="Wichtel auslosen"
+        value={t("drawNamesButton")}
       />
     </form>
   )

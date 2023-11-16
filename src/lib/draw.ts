@@ -1,6 +1,7 @@
 import _shuffle from "lodash/shuffle"
 import { DrawnSanta, SantaWithUrl, SecretSanta } from "~/lib/store"
 import { obfuscate } from "~/lib/obfuscate"
+import { lookupQuerystring, SupportedLanguages } from "~/lib/i18n"
 
 const SHUFFLE_LIMIT = 50
 
@@ -10,16 +11,22 @@ const assertNamesAreUnique = (santas: readonly SecretSanta[]) => {
   }
 }
 
-const addUrl = (santa: DrawnSanta, urlBase: string): SantaWithUrl => {
+const addUrl = (
+  santa: DrawnSanta,
+  urlBase: string,
+  language: SupportedLanguages,
+): SantaWithUrl => {
   const url = new URL("reveal", urlBase)
   url.searchParams.append("s", santa.name)
   url.searchParams.append("p", obfuscate(santa.presentee) as string)
+  url.searchParams.append(lookupQuerystring, language)
   return { ...santa, state: "withUrl", url: url.toString() }
 }
 
 export const draw = (
   santas: readonly SecretSanta[],
   urlBase: string,
+  language: SupportedLanguages,
 ): SantaWithUrl[] => {
   assertNamesAreUnique(santas)
 
@@ -42,5 +49,5 @@ export const draw = (
         presentee: presenteePool[i].name,
       }),
     )
-    .map(santa => addUrl(santa, urlBase))
+    .map(santa => addUrl(santa, urlBase, language))
 }
