@@ -1,11 +1,12 @@
 // @refresh reload
-import { Suspense } from "solid-js"
+import { onMount, Suspense } from "solid-js"
 import {
   Body,
   ErrorBoundary,
   FileRoutes,
   Head,
   Html,
+  Link,
   Meta,
   Routes,
   Scripts,
@@ -20,6 +21,7 @@ import { configureI18next, translations } from "~/lib/i18n"
 export default function Root() {
   initSentry()
   configureI18next().catch(captureException)
+  onMount(() => import("~/lib/script.tagged-events.js"))
 
   const errorComponent = (e: Error) => {
     captureException(e)
@@ -43,20 +45,15 @@ export default function Root() {
         </Title>
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
+        <Meta
           name="description"
           content="Wichtel-Auslosung schnell und ohne Anmeldung"
         />
-        <meta
+        <Meta
           name="keywords"
           content="wichtel, wichteln, secret santa, père noël secret, auslosen, draw names, tirer au sort, zuweisen, express, schnell, einfach, unkompliziert, ohne anmeldung, quick, simplement, easy"
         />
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <script
-          defer
-          data-domain="wichtel.express"
-          src="https://plausible.io/js/script.tagged-events.js"
-        ></script>
+        <Link rel="icon" href="/favicon.png" type="image/png" />
       </Head>
       <Body>
         <Suspense>
